@@ -1,9 +1,10 @@
 import 'dart:math';
 
-import 'package:app/enums/Ranks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
+
+import './enums/Ranks.dart';
 
 const List<String> RANKS = ['Bronze', 'Silver', 'Gold', 'Plutinum', 'Diamond', 'Master', 'Predetor'];
 
