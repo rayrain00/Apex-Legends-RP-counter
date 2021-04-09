@@ -251,6 +251,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 prefs.setString(RECORD_KEY, jsonEncode(record.toJson()));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: const Text('Saved!'),
+                ));
               },
               icon: Icon(Icons.save),
               label: const Text('Save'),
