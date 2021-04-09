@@ -9,7 +9,7 @@ class Counter extends StatelessWidget {
   final Function setCounter;
   final int minValue;
   final int maxValue;
-  
+
   Counter({
     this.name,
     this.counter,

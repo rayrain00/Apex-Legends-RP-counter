@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -129,7 +130,7 @@ class _RecordListPageState extends State<RecordListPage> {
         itemBuilder: (BuildContext context, int index) {
           final Record record = records[index];
           return ExpansionTile(
-            title: Text('#${record.ranking.toString()}  ${record.rp.toString()} RP  ${record.kill.toString()} kill  ${record.assist.toString()} assist'),
+            title: Text('#${record.ranking.toString()}  ${record.rp.toString()} RP  ${record.kill.toString()} kill  ${record.assist.toString()} assist  ${record.damage.toString()} damage'),
             subtitle: Text('${DateFormat('yyyy-MM-dd kk:mm').format(record.playedAt)}'),
             trailing: Icon(Icons.edit),
             children: [
@@ -171,16 +172,27 @@ class _RecordListPageState extends State<RecordListPage> {
                   updateRecords(newRecords);
                 },
               ),
-              Counter(
-                name: 'Damage',
-                counter: record.damage,
-                setCounter: (value) {
-                  Record newRecord = records[index];
-                  newRecord.damage = value;
-                  List<Record> newRecords = records;
-                  newRecords[index] = newRecord;
-                  updateRecords(newRecords);
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Text('Damage'),
+                  SizedBox(
+                    width: 170,
+                    child: TextField(
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter.digitsOnly,
+                      ],
+                      onChanged: (value) {
+                        Record newRecord = records[index];
+                        newRecord.damage = int.parse(value);
+                        List<Record> newRecords = records;
+                        newRecords[index] = newRecord;
+                        updateRecords(newRecords);
+                      },
+                    ),
+                  ),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
