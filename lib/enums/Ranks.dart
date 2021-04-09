@@ -1,6 +1,6 @@
-enum Ranks { bronze, silver, gold, platinum, diamond, master, predetor }
+enum Rank { bronze, silver, gold, platinum, diamond, master, predetor }
 
-extension ParseToString on Ranks {
+extension ParseToString on Rank {
   String toShortString() {
     return this.toString().split('.').last;
   }

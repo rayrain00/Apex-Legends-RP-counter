@@ -37,33 +37,34 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Ranks rank = Ranks.bronze;
+  Rank rank = Rank.bronze;
   int kill = 0;
   int assist = 0;
   int ranking = 1;
   int rp = 0;
+  int damage = 0;
 
   String getRP() {
     int value = 0;
 
     switch(rank) {
-      case Ranks.predetor:
-      case Ranks.master:
+      case Rank.predetor:
+      case Rank.master:
         value -= 60;
         break;
-      case Ranks.diamond:
+      case Rank.diamond:
         value -= 48;
         break;
-      case Ranks.platinum:
+      case Rank.platinum:
         value -= 36;
         break;
-      case Ranks.gold:
+      case Rank.gold:
         value -= 36;
         break;
-      case Ranks.silver:
+      case Rank.silver:
         value -= 24;
         break;
-      case Ranks.bronze:
+      case Rank.bronze:
         value -= 12;
         break;
     }
@@ -146,17 +147,14 @@ class _MyHomePageState extends State<MyHomePage> {
                   icon: Icon(Icons.edit),
                   onPressed: () {
                     Picker picker = Picker(
-                      adapter: PickerDataAdapter<String>(pickerdata: Ranks.values.map((rank) {
+                      adapter: PickerDataAdapter<String>(pickerdata: Rank.values.map((rank) {
                         return rank.toShortString();
                       }).toList()),
                       onConfirm: (Picker picker, List _) {
-                        for (int i=0; i<Ranks.values.length; i++) {
-                          Ranks value = Ranks.values[i];
-                          print(value.toShortString() == picker.getSelectedValues()[0]);
+                        for (int i=0; i<Rank.values.length; i++) {
+                          Rank value = Rank.values[i];
                           if (value.toShortString() == picker.getSelectedValues()[0]) {
-                            print(value);
                             setState(() { rank = value; });
-                            print(rank);
                             return;
                           }
                         }
