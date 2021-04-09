@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
 
@@ -22,7 +23,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         primaryColor: Colors.red,
       ),
-      home: MyHomePage(),
+      home: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: MyHomePage(),
+      ),
     );
   }
 }
@@ -182,6 +186,25 @@ class _MyHomePageState extends State<MyHomePage> {
               setCounter: (value) {
                 setState(() { assist = value; });
               },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text(
+                  'Damage',
+                  style: TextStyle(fontSize: 20),
+                ),
+                SizedBox(
+                  width: 200,
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    onChanged: (value) { setState(() { damage = int.parse(value); }); }
+                  ),
+                ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
