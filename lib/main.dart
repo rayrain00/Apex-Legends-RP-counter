@@ -297,7 +297,7 @@ class Counter extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.remove_circle),
               onPressed: () {
-                setCounter(counter - 1);
+                setCounter(max(counter - 1, minValue));
               }
             ),
             NumberPicker(
@@ -312,7 +312,7 @@ class Counter extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.add_circle),
               onPressed: () {
-                setCounter(counter + 1);
+                setCounter(min(counter + 1, maxValue));
               }
             ),
           ],
