@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.red,
-        primaryColor: Colors.red,
+        accentColor: Colors.redAccent,
       ),
       home: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
@@ -141,14 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontSize: 20,
                   ),
                 ),
-                Text(
-                  rank.toShortString(),
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-                ElevatedButton.icon(
-                  icon: Icon(Icons.edit),
+                OutlinedButton(
                   onPressed: () {
                     Picker picker = Picker(
                       adapter: PickerDataAdapter<String>(pickerdata: Rank.values.map((rank) {
@@ -160,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     );
                     picker.show(_scaffoldKey.currentState);
                   },
-                  label: const Text('Change'),
+                  child: Text(rank.toShortString()),
                 ),
               ],
             ),
