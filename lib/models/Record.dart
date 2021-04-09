@@ -1,6 +1,7 @@
 import '../enums/Rank.dart';
 
 const RECORD_KEY = 'record';
+const RECORDS_KEY = 'records';
 
 class Record {
   Rank rank = Rank.bronze;
@@ -28,7 +29,7 @@ class Record {
       ranking = int.parse(json['ranking']),
       rp = int.parse(json['rp']),
       damage = int.parse(json['damage']),
-      playedAt = DateTime.parse(json['playedAt']);
+      playedAt = DateTime.tryParse(json['playedAt']);
 
   Map<String, dynamic> toJson() => {
     'rank': rank.toShortString(),
