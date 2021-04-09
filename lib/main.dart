@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-import './enums/Ranks.dart';
+import 'enums/Rank.dart';
 
 const List<String> RANKS = ['Bronze', 'Silver', 'Gold', 'Plutinum', 'Diamond', 'Master', 'Predetor'];
 
@@ -151,13 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         return rank.toShortString();
                       }).toList()),
                       onConfirm: (Picker picker, List _) {
-                        for (int i=0; i<Rank.values.length; i++) {
-                          Rank value = Rank.values[i];
-                          if (value.toShortString() == picker.getSelectedValues()[0]) {
-                            setState(() { rank = value; });
-                            return;
-                          }
-                        }
+                        setState(() { rank = parseStringToRank[picker.getSelectedValues()[0]]; });
                       },
                     );
                     picker.show(_scaffoldKey.currentState);
