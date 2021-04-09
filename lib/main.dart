@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:math';
 
+import 'package:Apex_RP_Counter/models/Record.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:numberpicker/numberpicker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'enums/Rank.dart';
 
@@ -41,17 +44,31 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  Rank rank = Rank.bronze;
-  int kill = 0;
-  int assist = 0;
-  int ranking = 1;
-  int rp = 0;
-  int damage = 0;
+  Record record = Record();
 
-  String getRP() {
+  @override
+  void initState() {
+    super.initState();
+    loadRecord();
+  }
+
+  void loadRecord() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String recordString = prefs.getString(RECORD_KEY);
+    Map<String, dynamic> recordMap = jsonDecode(recordString);
+    Record newRecord = Record.fromJson(recordMap);
+    updateRecord(newRecord);
+  }
+
+  void updateRecord(Record newRecord) {
+    setState(() => record = newRecord);
+    updateRP();
+  }
+
+  void updateRP() {
     int value = 0;
 
-    switch(rank) {
+    switch(record.rank) {
       case Rank.predetor:
       case Rank.master:
         value -= 60;
@@ -74,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
 
     int rate = 10;
-    switch(ranking) {
+    switch(record.ranking) {
       case 1:
         value += 100;
         rate = 25;
@@ -116,9 +133,11 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
     }
 
-    value += rate * min(kill + assist, 6);
+    value += rate * min(record.kill + record.assist, 6);
 
-    return value.toString();
+    Record newRecord = record;
+    newRecord.rp = value;
+    setState(() => record = newRecord);
   }
 
   @override
@@ -148,36 +167,44 @@ class _MyHomePageState extends State<MyHomePage> {
                         return rank.toShortString();
                       }).toList()),
                       onConfirm: (Picker picker, List _) {
-                        setState(() { rank = parseStringToRank[picker.getSelectedValues()[0]]; });
+                        Record newRecord = record;
+                        newRecord.rank = parseStringToRank[picker.getSelectedValues()[0]];
+                        updateRecord(newRecord);
                       },
                     );
                     picker.show(_scaffoldKey.currentState);
                   },
-                  child: Text(rank.toShortString()),
+                  child: Text(record.rank.toShortString()),
                 ),
               ],
             ),
             Counter(
               name: 'Ranking',
-              counter: ranking,
+              counter: record.ranking,
               setCounter: (value) {
-                setState(() { ranking = value; });
+                Record newRecord = record;
+                newRecord.ranking = value;
+                updateRecord(newRecord);
               },
               minValue: 1,
               maxValue: 20,
             ),
             Counter(
               name: 'Kill',
-              counter: kill,
+              counter: record.kill,
               setCounter: (value) {
-                setState(() { kill = value; });
+                Record newRecord = record;
+                newRecord.kill = value;
+                updateRecord(newRecord);
               },
             ),
             Counter(
               name: 'Assist',
-              counter: assist,
+              counter: record.assist,
               setCounter: (value) {
-                setState(() { assist = value; });
+                Record newRecord = record;
+                newRecord.assist = value;
+                updateRecord(newRecord);
               },
             ),
             Row(
@@ -194,7 +221,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly,
                     ],
-                    onChanged: (value) { setState(() { damage = int.parse(value); }); }
+                    onChanged: (value) {
+                      Record newRecord = record;
+                      newRecord.damage = int.parse(value);
+                      updateRecord(newRecord);
+                    },
                   ),
                 ),
               ],
@@ -207,10 +238,22 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: TextStyle(fontSize: 20),
                 ),
                 Text(
-                  getRP(),
+                  record.rp.toString(),
                   style: TextStyle(fontSize: 20),
                 ),
               ],
+            ),
+            ElevatedButton.icon(
+              onPressed: () async {
+                Record newRecord = record;
+                newRecord.playedAt = DateTime.now();
+                updateRecord(newRecord);
+
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                prefs.setString(RECORD_KEY, jsonEncode(record.toJson()));
+              },
+              icon: Icon(Icons.save),
+              label: const Text('Save'),
             ),
           ],
         ),
