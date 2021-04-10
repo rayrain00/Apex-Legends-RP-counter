@@ -145,7 +145,23 @@ class _RecordListPageState extends State<RecordListPage> {
         itemBuilder: (BuildContext context, int index) {
           final Record record = records[index];
           return ExpansionTile(
-            title: Text('#${record.ranking.toString()}  ${record.rp.toString()} RP  ${record.kill.toString()} kill  ${record.assist.toString()} assist  ${record.damage.toString()} damage'),
+            leading: Container(
+              width: 48,
+              height: 48,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(48),
+                color: Colors.white,
+              ),
+              child: Text(
+                '#${record.ranking.toString()}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            title: Text('${record.rp.toString()} RP  ${record.kill.toString()} kill  ${record.assist.toString()} assist  ${record.damage.toString()} damage'),
             subtitle: Text('${DateFormat('yyyy-MM-dd kk:mm').format(record.playedAt)}'),
             trailing: Icon(Icons.edit),
             children: [
