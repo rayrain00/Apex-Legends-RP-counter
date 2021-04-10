@@ -270,7 +270,7 @@ class _RecordListPageState extends State<RecordListPage> {
         },
         separatorBuilder: (BuildContext context, int index) => Divider(),
         itemCount: records.length,
-      ) : Center(child: Text('No data')),
+      ) : Center(child: const Text('No data')),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {

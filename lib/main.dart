@@ -1,17 +1,7 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_picker/flutter_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'components/Counter.dart';
-import 'enums/Rank.dart';
-import 'models/Record.dart';
 import 'pages/RecordListPage.dart';
-
-const List<String> RANKS = ['Bronze', 'Silver', 'Gold', 'Plutinum', 'Diamond', 'Master', 'Predetor'];
 
 void main() {
   runApp(MyApp());
