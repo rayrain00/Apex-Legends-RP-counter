@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -172,75 +173,84 @@ class _RecordListPageState extends State<RecordListPage> {
                   updateRecords(newRecords);
                 },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Text('Damage'),
-                  SizedBox(
-                    width: 170,
-                    child: TextField(
-                      keyboardType: TextInputType.number,
-                      inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
-                      ],
-                      onChanged: (value) {
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    const Text('Damage'),
+                    SizedBox(
+                      width: 170,
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        onChanged: (value) {
+                          Record newRecord = records[index];
+                          newRecord.damage = int.parse(value);
+                          List<Record> newRecords = records;
+                          newRecords[index] = newRecord;
+                          updateRecords(newRecords);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      width: 100,
+                      child: const Text('Played at'),
+                    ),
+                    OutlinedButton(
+                      child: Text(DateFormat('yyyy-M-dd').format(record.playedAt)),
+                      onPressed: () async {
+                        DateTime dateTime = await showDatePicker(
+                          context: context,
+                          initialDate: record.playedAt,
+                          firstDate: DateTime(2018),
+                          lastDate: DateTime(2030),
+                        );
+                        DateTime newPlayedAt = DateTime(dateTime.year, dateTime.month, dateTime.day, record.playedAt.hour, record.playedAt.minute);
                         Record newRecord = records[index];
-                        newRecord.damage = int.parse(value);
+                        newRecord.playedAt = newPlayedAt;
                         List<Record> newRecords = records;
                         newRecords[index] = newRecord;
                         updateRecords(newRecords);
                       },
                     ),
-                  ),
-                ],
+                    OutlinedButton(
+                      child: Text(DateFormat('kk:mm').format(record.playedAt)),
+                      onPressed: () async {
+                        TimeOfDay timeOfDay = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(record.playedAt));
+                        DateTime newPlayedAt = DateTime(record.playedAt.year, record.playedAt.month, record.playedAt.day, timeOfDay.hour, timeOfDay.minute);
+                        Record newRecord = records[index];
+                        newRecord.playedAt = newPlayedAt;
+                        List<Record> newRecords = records;
+                        newRecords[index] = newRecord;
+                        updateRecords(newRecords);
+                      }
+                    ),
+                  ],
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: const Text('Played at'),
-                  ),
-                  OutlinedButton(
-                    child: Text(DateFormat('yyyy-M-dd').format(record.playedAt)),
-                    onPressed: () async {
-                      DateTime dateTime = await showDatePicker(
-                        context: context,
-                        initialDate: record.playedAt,
-                        firstDate: DateTime(2018),
-                        lastDate: DateTime(2030),
-                      );
-                      DateTime newPlayedAt = DateTime(dateTime.year, dateTime.month, dateTime.day, record.playedAt.hour, record.playedAt.minute);
-                      Record newRecord = records[index];
-                      newRecord.playedAt = newPlayedAt;
-                      List<Record> newRecords = records;
-                      newRecords[index] = newRecord;
-                      updateRecords(newRecords);
-                    },
-                  ),
-                  OutlinedButton(
-                    child: Text(DateFormat('kk:mm').format(record.playedAt)),
-                    onPressed: () async {
-                      TimeOfDay timeOfDay = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(record.playedAt));
-                      DateTime newPlayedAt = DateTime(record.playedAt.year, record.playedAt.month, record.playedAt.day, timeOfDay.hour, timeOfDay.minute);
-                      Record newRecord = records[index];
-                      newRecord.playedAt = newPlayedAt;
-                      List<Record> newRecords = records;
-                      newRecords[index] = newRecord;
-                      updateRecords(newRecords);
-                    }
-                  ),
-                ],
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    List<Record> newRecords = records;
+                    newRecords.removeAt(index);
+                    updateRecords(newRecords);
+                  },
+                  icon: Icon(CupertinoIcons.trash),
+                  label: Text('Delete'),
+                ),
               ),
-              ElevatedButton.icon(
-                onPressed: () {
-                  List<Record> newRecords = records;
-                  newRecords.removeAt(index);
-                  updateRecords(newRecords);
-                },
-                icon: Icon(Icons.remove),
-                label: Text('Delete'),
-              )
             ],
           );
         },
