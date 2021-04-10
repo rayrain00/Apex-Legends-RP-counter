@@ -54,11 +54,11 @@ class _ChartPageState extends State<ChartPage> {
           vertical: 48,
           horizontal: 16,
         ),
-        child: charts.TimeSeriesChart(
-          seriesList,
-          animate: animate,
-          dateTimeFactory: const charts.LocalDateTimeFactory(),
-        ),
+        // child: charts.TimeSeriesChart(
+        //   seriesList,
+        //   animate: animate,
+        //   dateTimeFactory: const charts.LocalDateTimeFactory(),
+        // ),
       ),
     );
   }

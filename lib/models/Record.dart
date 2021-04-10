@@ -24,12 +24,12 @@ class Record {
 
   Record.fromJson(Map<String, dynamic> json)
     : rank = parseStringToRank[json['rank']],
-      kill = int.parse(json['kill']),
-      assist = int.parse(json['assist']),
-      ranking = int.parse(json['ranking']),
-      rp = int.parse(json['rp']),
-      damage = int.parse(json['damage']),
-      playedAt = DateTime.tryParse(json['playedAt']);
+      kill = int.parse(json['kill'].toString()),
+      assist = int.parse(json['assist'].toString()),
+      ranking = int.parse(json['ranking'].toString()),
+      rp = int.parse(json['rp'].toString()),
+      damage = int.parse(json['damage'].toString()),
+      playedAt = DateTime.tryParse(json['playedAt'].toString());
 
   Map<String, dynamic> toJson() => {
     'rank': rank.toShortString(),

@@ -94,7 +94,7 @@ class _RecordListPageState extends State<RecordListPage> {
         break;
     }
 
-    value += rate * min(record.kill + record.assist, 6);
+    value += rate * min(record.kill + record.assist, 6).toInt();
     return value;
   }
 
@@ -104,7 +104,7 @@ class _RecordListPageState extends State<RecordListPage> {
     List<Record> newRecords = [];
     final List<String> recordStrings = prefs.getStringList(RECORDS_KEY) ?? [];
     recordStrings.forEach((recordString) {
-      final Map<String, dynamic> recordMap = jsonDecode(recordString);
+      final Map<String, dynamic> recordMap = json.decode(recordString) as Map<String, dynamic>;
       final Record newRecord = Record.fromJson(recordMap);
       newRecords.add(newRecord);
     });
@@ -152,7 +152,7 @@ class _RecordListPageState extends State<RecordListPage> {
               Counter(
                 name: 'Ranking',
                 counter: record.ranking,
-                setCounter: (value) {
+                setCounter: (int value) {
                   Record newRecord = records[index];
                   newRecord.ranking = value;
                   newRecord.rp = getRP(newRecord);
@@ -166,7 +166,7 @@ class _RecordListPageState extends State<RecordListPage> {
               Counter(
                 name: 'Kill',
                 counter: record.kill,
-                setCounter: (value) {
+                setCounter: (int value) {
                   Record newRecord = records[index];
                   newRecord.kill = value;
                   newRecord.rp = getRP(newRecord);
@@ -178,7 +178,7 @@ class _RecordListPageState extends State<RecordListPage> {
               Counter(
                 name: 'Assist',
                 counter: record.assist,
-                setCounter: (value) {
+                setCounter: (int value) {
                   Record newRecord = records[index];
                   newRecord.assist = value;
                   newRecord.rp = getRP(newRecord);
