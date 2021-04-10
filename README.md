@@ -1,6 +1,10 @@
-# app
+# Apex Legends RP counter
 
-A new Flutter project.
+The ranked points counter app for Apex Legends players.
+
+- iOS (in progress)
+- Android (in progress)
+- [Web Application](https://apex-legends-rp-counter.web.app/)
 
 ## Getting Started
 
