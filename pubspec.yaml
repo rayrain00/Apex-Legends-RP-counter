@@ -1,4 +1,4 @@
-name: Apex_RP_Counter
+name: Apex_Legends_RP_Counter
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -32,6 +32,7 @@ dependencies:
   flutter_picker: ^2.0.1
   shared_preferences: ^2.0.5
   intl: ^0.17.0
+  charts_flutter: ^0.10.0
 
 dev_dependencies:
   flutter_test:

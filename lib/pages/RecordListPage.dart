@@ -10,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../components/Counter.dart';
 import '../enums/Rank.dart';
 import '../models/Record.dart';
+import '../pages/ChartPage.dart';
 
 class RecordListPage extends StatefulWidget {
   @override
@@ -126,6 +127,19 @@ class _RecordListPageState extends State<RecordListPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Apex Legends RP Counter'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.insert_chart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChartPage(
+                  records: records,
+                )),
+              );
+            },
+          ),
+        ],
       ),
       body: 0 < records.length ? ListView.separated(
         itemBuilder: (BuildContext context, int index) {
