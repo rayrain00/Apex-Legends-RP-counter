@@ -100,7 +100,7 @@ class _RecordListPageState extends State<RecordListPage> {
   }
 
   void loadRecords() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     List<Record> newRecords = [];
     final List<String> recordStrings = prefs.getStringList(RECORDS_KEY) ?? [];
@@ -117,7 +117,7 @@ class _RecordListPageState extends State<RecordListPage> {
   void updateRecords(List<Record> newRecords) async {
     setState(() => records = newRecords);
 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> recordStrings = [];
     newRecords.forEach((record) {
       recordStrings.add(jsonEncode(record.toJson()));
@@ -132,7 +132,7 @@ class _RecordListPageState extends State<RecordListPage> {
         title: const Text('Apex Legends RP Counter'),
         actions: [
           IconButton(
-            icon: Icon(Icons.insert_chart),
+            icon: const Icon(Icons.insert_chart),
             onPressed: () {
               Navigator.push(
                 context,
@@ -147,7 +147,7 @@ class _RecordListPageState extends State<RecordListPage> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
+            padding: const EdgeInsets.symmetric(vertical: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -174,7 +174,7 @@ class _RecordListPageState extends State<RecordListPage> {
                     ),
                     child: Text(
                       '#${record.ranking.toString()}',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
@@ -182,7 +182,7 @@ class _RecordListPageState extends State<RecordListPage> {
                   ),
                   title: Text('${record.rp.toString()} RP  ${record.kill.toString()} kill  ${record.assist.toString()} assist  ${record.damage.toString()} damage'),
                   subtitle: Text('${DateFormat('yyyy-MM-dd kk:mm').format(record.playedAt)}'),
-                  trailing: Icon(Icons.edit),
+                  trailing: const Icon(Icons.edit),
                   children: [
                     Counter(
                       name: 'Ranking',
@@ -223,7 +223,7 @@ class _RecordListPageState extends State<RecordListPage> {
                       },
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -249,7 +249,7 @@ class _RecordListPageState extends State<RecordListPage> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -290,28 +290,28 @@ class _RecordListPageState extends State<RecordListPage> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: ElevatedButton.icon(
                         onPressed: () {
                           List<Record> newRecords = records;
                           newRecords.removeAt(index);
                           updateRecords(newRecords);
                         },
-                        icon: Icon(CupertinoIcons.trash),
-                        label: Text('Delete'),
+                        icon: const Icon(CupertinoIcons.trash),
+                        label: const Text('Delete'),
                       ),
                     ),
                   ],
                 );
               },
-              separatorBuilder: (BuildContext context, int index) => Divider(),
+              separatorBuilder: (BuildContext context, int index) => const Divider(),
               itemCount: records.length,
             ) : Center(child: const Text('No data')),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         onPressed: () {
           List<Record> newRecords = records;
           Record newRecord = Record();

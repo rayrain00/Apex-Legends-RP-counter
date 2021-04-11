@@ -21,7 +21,7 @@ class Counter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
         child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -35,7 +35,7 @@ class Counter extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: Icon(Icons.remove_circle),
+                icon: const Icon(Icons.remove_circle),
                 onPressed: () {
                   setCounter(max(counter - 1, minValue));
                 }
@@ -50,7 +50,7 @@ class Counter extends StatelessWidget {
                 itemHeight: 24,
               ),
               IconButton(
-                icon: Icon(Icons.add_circle),
+                icon: const Icon(Icons.add_circle),
                 onPressed: () {
                   setCounter(min(counter + 1, maxValue));
                 }
