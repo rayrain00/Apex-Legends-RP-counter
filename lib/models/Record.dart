@@ -1,5 +1,6 @@
 import '../enums/Rank.dart';
 
+const INITIAL_RP_KEY = 'initial_rp';
 const RECORD_KEY = 'record';
 const RECORDS_KEY = 'records';
 

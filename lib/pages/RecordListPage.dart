@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:Apex_Legends_RP_Counter/components/InitialRPTextField.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -108,7 +109,9 @@ class _RecordListPageState extends State<RecordListPage> {
       final Record newRecord = Record.fromJson(recordMap);
       newRecords.add(newRecord);
     });
-    setState(() => records = newRecords);
+    setState(() {
+      records = newRecords;
+    });
   }
 
   void updateRecords(List<Record> newRecords) async {
@@ -141,152 +144,172 @@ class _RecordListPageState extends State<RecordListPage> {
           ),
         ],
       ),
-      body: 0 < records.length ? ListView.separated(
-        itemBuilder: (BuildContext context, int index) {
-          final Record record = records[index];
-          return ExpansionTile(
-            leading: Container(
-              width: 48,
-              height: 48,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(48),
-                color: Colors.white,
-              ),
-              child: Text(
-                '#${record.ranking.toString()}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                const Text('Initial RP'),
+                SizedBox(
+                  width: 200,
+                  child: InitialRPTextField(),
                 ),
-              ),
+              ],
             ),
-            title: Text('${record.rp.toString()} RP  ${record.kill.toString()} kill  ${record.assist.toString()} assist  ${record.damage.toString()} damage'),
-            subtitle: Text('${DateFormat('yyyy-MM-dd kk:mm').format(record.playedAt)}'),
-            trailing: Icon(Icons.edit),
-            children: [
-              Counter(
-                name: 'Ranking',
-                counter: record.ranking,
-                setCounter: (int value) {
-                  Record newRecord = records[index];
-                  newRecord.ranking = value;
-                  newRecord.rp = getRP(newRecord);
-                  List<Record> newRecords = records;
-                  newRecords[index] = newRecord;
-                  updateRecords(newRecords);
-                },
-                minValue: 1,
-                maxValue: 20,
-              ),
-              Counter(
-                name: 'Kill',
-                counter: record.kill,
-                setCounter: (int value) {
-                  Record newRecord = records[index];
-                  newRecord.kill = value;
-                  newRecord.rp = getRP(newRecord);
-                  List<Record> newRecords = records;
-                  newRecords[index] = newRecord;
-                  updateRecords(newRecords);
-                },
-              ),
-              Counter(
-                name: 'Assist',
-                counter: record.assist,
-                setCounter: (int value) {
-                  Record newRecord = records[index];
-                  newRecord.assist = value;
-                  newRecord.rp = getRP(newRecord);
-                  List<Record> newRecords = records;
-                  newRecords[index] = newRecord;
-                  updateRecords(newRecords);
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    const Text('Damage'),
-                    SizedBox(
-                      width: 170,
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        onChanged: (value) {
-                          Record newRecord = records[index];
-                          newRecord.damage = int.parse(value);
-                          List<Record> newRecords = records;
-                          newRecords[index] = newRecord;
-                          updateRecords(newRecords);
-                        },
+          ),
+          Expanded(
+            child: 0 < records.length ? ListView.separated(
+              itemBuilder: (BuildContext context, int index) {
+                final Record record = records[index];
+                return ExpansionTile(
+                  leading: Container(
+                    width: 48,
+                    height: 48,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(48),
+                      color: Colors.white,
+                    ),
+                    child: Text(
+                      '#${record.ranking.toString()}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ),
+                  title: Text('${record.rp.toString()} RP  ${record.kill.toString()} kill  ${record.assist.toString()} assist  ${record.damage.toString()} damage'),
+                  subtitle: Text('${DateFormat('yyyy-MM-dd kk:mm').format(record.playedAt)}'),
+                  trailing: Icon(Icons.edit),
                   children: [
-                    SizedBox(
-                      width: 100,
-                      child: const Text('Played at'),
-                    ),
-                    OutlinedButton(
-                      child: Text(DateFormat('yyyy-M-dd').format(record.playedAt)),
-                      onPressed: () async {
-                        DateTime dateTime = await showDatePicker(
-                          context: context,
-                          initialDate: record.playedAt,
-                          firstDate: DateTime(2018),
-                          lastDate: DateTime(2030),
-                        );
-                        DateTime newPlayedAt = DateTime(dateTime.year, dateTime.month, dateTime.day, record.playedAt.hour, record.playedAt.minute);
+                    Counter(
+                      name: 'Ranking',
+                      counter: record.ranking,
+                      setCounter: (int value) {
                         Record newRecord = records[index];
-                        newRecord.playedAt = newPlayedAt;
+                        newRecord.ranking = value;
+                        newRecord.rp = getRP(newRecord);
+                        List<Record> newRecords = records;
+                        newRecords[index] = newRecord;
+                        updateRecords(newRecords);
+                      },
+                      minValue: 1,
+                      maxValue: 20,
+                    ),
+                    Counter(
+                      name: 'Kill',
+                      counter: record.kill,
+                      setCounter: (int value) {
+                        Record newRecord = records[index];
+                        newRecord.kill = value;
+                        newRecord.rp = getRP(newRecord);
                         List<Record> newRecords = records;
                         newRecords[index] = newRecord;
                         updateRecords(newRecords);
                       },
                     ),
-                    OutlinedButton(
-                      child: Text(DateFormat('kk:mm').format(record.playedAt)),
-                      onPressed: () async {
-                        TimeOfDay timeOfDay = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(record.playedAt));
-                        DateTime newPlayedAt = DateTime(record.playedAt.year, record.playedAt.month, record.playedAt.day, timeOfDay.hour, timeOfDay.minute);
+                    Counter(
+                      name: 'Assist',
+                      counter: record.assist,
+                      setCounter: (int value) {
                         Record newRecord = records[index];
-                        newRecord.playedAt = newPlayedAt;
+                        newRecord.assist = value;
+                        newRecord.rp = getRP(newRecord);
                         List<Record> newRecords = records;
                         newRecords[index] = newRecord;
                         updateRecords(newRecords);
-                      }
+                      },
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          const Text('Damage'),
+                          SizedBox(
+                            width: 170,
+                            child: TextField(
+                              textAlign: TextAlign.right,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              onChanged: (value) {
+                                Record newRecord = records[index];
+                                newRecord.damage = int.parse(value);
+                                List<Record> newRecords = records;
+                                newRecords[index] = newRecord;
+                                updateRecords(newRecords);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            child: const Text('Played at'),
+                          ),
+                          OutlinedButton(
+                            child: Text(DateFormat('yyyy-M-dd').format(record.playedAt)),
+                            onPressed: () async {
+                              DateTime dateTime = await showDatePicker(
+                                context: context,
+                                initialDate: record.playedAt,
+                                firstDate: DateTime(2018),
+                                lastDate: DateTime(2030),
+                              );
+                              DateTime newPlayedAt = DateTime(dateTime.year, dateTime.month, dateTime.day, record.playedAt.hour, record.playedAt.minute);
+                              Record newRecord = records[index];
+                              newRecord.playedAt = newPlayedAt;
+                              List<Record> newRecords = records;
+                              newRecords[index] = newRecord;
+                              updateRecords(newRecords);
+                            },
+                          ),
+                          OutlinedButton(
+                            child: Text(DateFormat('kk:mm').format(record.playedAt)),
+                            onPressed: () async {
+                              TimeOfDay timeOfDay = await showTimePicker(context: context, initialTime: TimeOfDay.fromDateTime(record.playedAt));
+                              DateTime newPlayedAt = DateTime(record.playedAt.year, record.playedAt.month, record.playedAt.day, timeOfDay.hour, timeOfDay.minute);
+                              Record newRecord = records[index];
+                              newRecord.playedAt = newPlayedAt;
+                              List<Record> newRecords = records;
+                              newRecords[index] = newRecord;
+                              updateRecords(newRecords);
+                            }
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 8),
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          List<Record> newRecords = records;
+                          newRecords.removeAt(index);
+                          updateRecords(newRecords);
+                        },
+                        icon: Icon(CupertinoIcons.trash),
+                        label: Text('Delete'),
+                      ),
                     ),
                   ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 8),
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    List<Record> newRecords = records;
-                    newRecords.removeAt(index);
-                    updateRecords(newRecords);
-                  },
-                  icon: Icon(CupertinoIcons.trash),
-                  label: Text('Delete'),
-                ),
-              ),
-            ],
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => Divider(),
-        itemCount: records.length,
-      ) : Center(child: const Text('No data')),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) => Divider(),
+              itemCount: records.length,
+            ) : Center(child: const Text('No data')),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
