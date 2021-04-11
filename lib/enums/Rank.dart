@@ -4,7 +4,7 @@ const Map<String, Rank> parseStringToRank = {
   'bronze': Rank.bronze,
   'silver': Rank.silver,
   'gold': Rank.gold,
-  'plutinum': Rank.platinum,
+  'platinum': Rank.platinum,
   'diamond': Rank.diamond,
   'master': Rank.master,
   'predetor': Rank.predetor,

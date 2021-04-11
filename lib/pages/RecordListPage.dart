@@ -5,6 +5,7 @@ import 'package:Apex_Legends_RP_Counter/components/InitialRPTextField.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +20,8 @@ class RecordListPage extends StatefulWidget {
 }
 
 class _RecordListPageState extends State<RecordListPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   List<Record> records = [];
 
   @override
@@ -128,6 +131,7 @@ class _RecordListPageState extends State<RecordListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: const Text('Apex Legends RP Counter'),
         actions: [
@@ -184,6 +188,32 @@ class _RecordListPageState extends State<RecordListPage> {
                   subtitle: Text('${DateFormat('yyyy-MM-dd kk:mm').format(record.playedAt)}'),
                   trailing: const Icon(Icons.edit),
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const Text( 'Rank'),
+                        OutlinedButton(
+                          onPressed: () {
+                            Picker picker = Picker(
+                              adapter: PickerDataAdapter<String>(pickerdata: Rank.values.map((rank) {
+                                return rank.toShortString();
+                              }).toList()),
+                              onConfirm: (Picker picker, List _) {
+                                Record newRecord = records[index];
+                                newRecord.rank = parseStringToRank[picker.getSelectedValues()[0]];
+                                print(picker.getSelectedValues());
+                                newRecord.rp = getRP(newRecord);
+                                List<Record> newRecords = records;
+                                newRecords[index] = newRecord;
+                                updateRecords(newRecords);
+                              },
+                            );
+                            picker.show(_scaffoldKey.currentState);
+                          },
+                          child: Text(record.rank.toShortString()),
+                        ),
+                      ],
+                    ),
                     Counter(
                       name: 'Ranking',
                       counter: record.ranking,
