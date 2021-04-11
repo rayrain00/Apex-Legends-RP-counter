@@ -166,7 +166,7 @@ class _RecordListPageState extends State<RecordListPage> {
           Expanded(
             child: 0 < records.length ? ListView.separated(
               itemBuilder: (BuildContext context, int index) {
-                final Record record = records[index];
+                final Record record = records.reversed.toList()[index];
                 return ExpansionTile(
                   leading: Container(
                     width: 48,
