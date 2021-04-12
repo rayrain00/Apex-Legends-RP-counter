@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share/share.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/Record.dart';
@@ -18,11 +21,17 @@ class ChartPage extends StatefulWidget {
 class _ChartPageState extends State<ChartPage> {
   List<charts.Series<dynamic, DateTime>> seriesList = [];
   bool animate = true;
+  ScreenshotController screenshotController = ScreenshotController();
 
   @override
   void initState() {
     super.initState();
     setData();
+  }
+
+  static Future<String> get localPath async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
   }
 
   void setData() async {
@@ -53,20 +62,39 @@ class _ChartPageState extends State<ChartPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Chart'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () async {
+              final String path = await localPath;
+              final String fileName = 'image.jpg';
+              await screenshotController.captureAndSave(path, fileName: fileName);
+              final RenderBox box = context.findRenderObject() as RenderBox;
+              await Share.shareFiles(
+                ['$path/$fileName'],
+                subject: 'sample subject',
+                sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(
           vertical: 48,
           horizontal: 16,
         ),
-        child: charts.TimeSeriesChart(
-          seriesList,
-          animate: animate,
-          primaryMeasureAxis: charts.NumericAxisSpec(
-            tickProviderSpec: charts.BasicNumericTickProviderSpec(zeroBound: false),
+        child: Screenshot(
+          controller: screenshotController,
+          child: charts.TimeSeriesChart(
+            seriesList,
+            animate: animate,
+            primaryMeasureAxis: charts.NumericAxisSpec(
+              tickProviderSpec: charts.BasicNumericTickProviderSpec(zeroBound: false),
+            ),
+            defaultRenderer: charts.LineRendererConfig(includeArea: true),
+            dateTimeFactory: const charts.LocalDateTimeFactory(),
           ),
-          defaultRenderer: charts.LineRendererConfig(includeArea: true),
-          dateTimeFactory: const charts.LocalDateTimeFactory(),
         ),
       ),
     );
