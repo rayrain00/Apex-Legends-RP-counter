@@ -45,13 +45,12 @@ class _RecordListPageState extends State<RecordListPage> {
         value -= 36;
         break;
       case Rank.gold:
-        value -= 36;
-        break;
-      case Rank.silver:
         value -= 24;
         break;
-      case Rank.bronze:
+      case Rank.silver:
         value -= 12;
+        break;
+      case Rank.bronze:
         break;
     }
 
@@ -191,7 +190,7 @@ class _RecordListPageState extends State<RecordListPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        const Text( 'Rank'),
+                        const Text('Rank'),
                         OutlinedButton(
                           onPressed: () {
                             Picker picker = Picker(
