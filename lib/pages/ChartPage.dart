@@ -18,8 +18,17 @@ class ChartPage extends StatefulWidget {
   _ChartPageState createState() => _ChartPageState();
 }
 
+enum DataType{
+  RP,
+  Rank,
+  Kill,
+  Assist,
+  Damage,
+}
+
 class _ChartPageState extends State<ChartPage> {
   List<charts.Series<dynamic, DateTime>> seriesList = [];
+  DataType dataType = DataType.RP;
   bool animate = true;
   ScreenshotController screenshotController = ScreenshotController();
 
@@ -40,8 +49,24 @@ class _ChartPageState extends State<ChartPage> {
 
     List<LinearRecord> data = [];
     widget.records.forEach((record) {
-      currentRP += record.rp;
-      data.add(LinearRecord(record.playedAt, currentRP));
+      switch(dataType){
+        case DataType.RP:
+          currentRP += record.rp;
+          data.add(LinearRecord(record.playedAt, currentRP));
+          break;
+        case DataType.Rank:
+          data.add(LinearRecord(record.playedAt, record.ranking));
+          break;
+        case DataType.Kill:
+          data.add(LinearRecord(record.playedAt, record.kill));
+          break;
+        case DataType.Assist:
+          data.add(LinearRecord(record.playedAt, record.assist));
+          break;
+        case DataType.Damage:
+          data.add(LinearRecord(record.playedAt, record.damage));
+          break;
+      }
     });
 
     List<charts.Series<LinearRecord, DateTime>> chartData = [
@@ -61,7 +86,7 @@ class _ChartPageState extends State<ChartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chart'),
+        title: Text(dataType.toString().replaceFirst(dataType.toString().split(('.'))[0] + '.', '')),
         actions: [
           IconButton(
             icon: Icon(Icons.share),
@@ -97,7 +122,24 @@ class _ChartPageState extends State<ChartPage> {
           ),
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.emoji_flags), title: Text('RP')),
+          BottomNavigationBarItem(icon: Icon(Icons.emoji_flags), title: Text('Ranking')),
+          BottomNavigationBarItem(icon: Icon(Icons.local_dining), title: Text('Kill')),
+          BottomNavigationBarItem(icon: Icon(Icons.family_restroom), title: Text('Assist')),
+          BottomNavigationBarItem(icon: Icon(Icons.local_dining), title: Text('Damage')),
+        ],
+        currentIndex: dataType.index,
+        onTap: _onItemTapped,
+        fixedColor: Colors.blueAccent,
+        type: BottomNavigationBarType.shifting,
+      ),
     );
+  }
+  void _onItemTapped(int index){
+    dataType = DataType.values[index];
+    setData();
   }
 }
 
